@@ -1,0 +1,31 @@
+identity:
+  experiment_name: brightness_sweep
+  trial_id: bright-001
+  description: Fixed stimulus area with increasing brightness level.
+
+video:
+  width: 640
+  height: 360
+  fps: 15
+  duration_seconds: 90
+  codec: mjpeg
+  bitrate_mode: vbr
+  gop: 15
+  jpeg_quality: 85
+
+stimulus:
+  type: brightness_sweep
+  start_time: 15
+  stop_time: 75
+  window_ms: 1000
+  binary_pattern: ""
+  changed_area_percent: 25
+  region_count: 8
+  brightness_level: 0.2
+
+transport:
+  protocol: tls_tcp
+  encryption: tls
+
+analysis:
+  aggregation_windows_ms: 1000

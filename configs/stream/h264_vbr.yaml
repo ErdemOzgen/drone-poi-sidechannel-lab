@@ -1,0 +1,4 @@
+codec: h264
+bitrate_mode: vbr
+gop: 15
+notes: Planned profile for future ffmpeg/pyav encoder integration.

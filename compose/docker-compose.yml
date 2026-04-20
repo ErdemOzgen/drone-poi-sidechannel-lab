@@ -1,0 +1,111 @@
+services:
+  video-generator:
+    build:
+      context: ..
+      dockerfile: docker/generator/Dockerfile
+    container_name: video-generator
+    env_file:
+      - .env
+    environment:
+      SERVICE_NAME: video-generator
+      GENERATED_DIR: /app/data/generated
+      LOG_DIR: /app/data/logs
+    command: ["python", "/svc/main.py"]
+    volumes:
+      - ../src/generator:/svc:ro
+      - ../configs:/app/configs:ro
+      - ../data/generated:/app/data/generated
+      - ../data/logs:/app/data/logs
+    networks:
+      - encvidlab_net
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /tmp/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  stream-receiver:
+    build:
+      context: ..
+      dockerfile: docker/receiver/Dockerfile
+    container_name: stream-receiver
+    env_file:
+      - .env
+    environment:
+      SERVICE_NAME: stream-receiver
+      RECEIVED_DIR: /app/data/received
+      LOG_DIR: /app/data/logs
+    command: ["python", "/svc/main.py"]
+    volumes:
+      - ../src/receiver:/svc:ro
+      - ../configs/tls/certs:/app/certs:ro
+      - ../data/received:/app/data/received
+      - ../data/logs:/app/data/logs
+    networks:
+      - encvidlab_net
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /tmp/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  stream-sender:
+    build:
+      context: ..
+      dockerfile: docker/sender/Dockerfile
+    container_name: stream-sender
+    env_file:
+      - .env
+    environment:
+      SERVICE_NAME: stream-sender
+      GENERATED_DIR: /app/data/generated
+      LOG_DIR: /app/data/logs
+    command: ["python", "/svc/main.py"]
+    volumes:
+      - ../src/sender:/svc:ro
+      - ../data/generated:/app/data/generated
+      - ../data/logs:/app/data/logs
+    depends_on:
+      video-generator:
+        condition: service_started
+      stream-receiver:
+        condition: service_healthy
+    networks:
+      - encvidlab_net
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /tmp/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  analyzer:
+    build:
+      context: ..
+      dockerfile: docker/analyzer/Dockerfile
+    container_name: analyzer
+    env_file:
+      - .env
+    environment:
+      SERVICE_NAME: analyzer
+      GENERATED_DIR: /app/data/generated
+      LOG_DIR: /app/data/logs
+      METRICS_DIR: /app/data/metrics
+      REPORTS_DIR: /app/data/reports
+    command: ["python", "/svc/main.py"]
+    volumes:
+      - ../src/analyzer:/svc:ro
+      - ../data/generated:/app/data/generated
+      - ../data/logs:/app/data/logs
+      - ../data/metrics:/app/data/metrics
+      - ../data/reports:/app/data/reports
+    networks:
+      - encvidlab_net
+    profiles:
+      - analysis
+
+networks:
+  encvidlab_net:
+    driver: bridge

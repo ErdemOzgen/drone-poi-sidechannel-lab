@@ -1,0 +1,31 @@
+identity:
+  experiment_name: area_sweep
+  trial_id: area-001
+  description: Increasing changed-area percentage over stimulus window.
+
+video:
+  width: 640
+  height: 360
+  fps: 15
+  duration_seconds: 90
+  codec: mjpeg
+  bitrate_mode: vbr
+  gop: 15
+  jpeg_quality: 85
+
+stimulus:
+  type: area_sweep
+  start_time: 15
+  stop_time: 75
+  window_ms: 1000
+  binary_pattern: ""
+  changed_area_percent: 5
+  region_count: 4
+  brightness_level: 1.0
+
+transport:
+  protocol: tls_tcp
+  encryption: tls
+
+analysis:
+  aggregation_windows_ms: 1000

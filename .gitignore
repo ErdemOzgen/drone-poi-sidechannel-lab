@@ -1,0 +1,6 @@
+configs/tls/certs/server.crt
+data/*
+configs/tls/certs/server.key
+data/generated/.DS_Store
+data/generated/generator.done
+data/generated/sender.done

@@ -1,0 +1,31 @@
+identity:
+  experiment_name: watermark_pattern
+  trial_id: wm-001
+  description: Recover a known binary sequence from encrypted flow metadata.
+
+video:
+  width: 640
+  height: 360
+  fps: 15
+  duration_seconds: 90
+  codec: mjpeg
+  bitrate_mode: vbr
+  gop: 15
+  jpeg_quality: 85
+
+stimulus:
+  type: watermark_pattern
+  start_time: 10
+  stop_time: 80
+  window_ms: 1000
+  binary_pattern: "111100001111111000000"
+  changed_area_percent: 30
+  region_count: 10
+  brightness_level: 1.0
+
+transport:
+  protocol: tls_tcp
+  encryption: tls
+
+analysis:
+  aggregation_windows_ms: 1000

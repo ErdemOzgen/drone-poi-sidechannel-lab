@@ -1,0 +1,31 @@
+identity:
+  experiment_name: baseline_static
+  trial_id: baseline-001
+  description: Static baseline with no active visual stimulus.
+
+video:
+  width: 640
+  height: 360
+  fps: 15
+  duration_seconds: 90
+  codec: mjpeg
+  bitrate_mode: vbr
+  gop: 15
+  jpeg_quality: 85
+
+stimulus:
+  type: baseline_static
+  start_time: 20
+  stop_time: 70
+  window_ms: 1000
+  binary_pattern: ""
+  changed_area_percent: 0
+  region_count: 1
+  brightness_level: 1.0
+
+transport:
+  protocol: tls_tcp
+  encryption: tls
+
+analysis:
+  aggregation_windows_ms: 1000

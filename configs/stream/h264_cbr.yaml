@@ -1,0 +1,5 @@
+codec: h264
+bitrate_mode: cbr
+gop: 15
+target_bitrate_kbps: 1200
+notes: Planned profile for fixed-rate comparison experiments.
